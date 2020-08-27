@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Hard Rock Solution - Song Lyric App</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Custom css -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar  navbar-dark my-3">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Hard Rock Solution">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="images/toggler-icon.svg" alt="">
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavId">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownId">
+                            <a class="dropdown-item" href="#">Action 1</a>
+                            <a class="dropdown-item" href="#">Action 2</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <div class="search-bar col-md-6 mx-auto">
+                <h1 class="text-center">Lyrics Search</h1>
+                <div class="search-box my-5">
+                    <input id="song-field" type="text" class="form-control" placeholder="Enter song name">
+                    <input id="artist-field" type="text" class="form-control" placeholder="Enter artist name">
+                    <button id="search-button" class="btn btn-success search-btn">Search</button>
+                </div>
+            </div>
+            <!-- === Fancy results === -->
+            <div id="display-details" class="search-result col-md-8 mx-auto py-4">
+                <!-- single result -->
+                <div class="single-result row align-items-center my-3 p-3">
+                    <div class="col-md-9">
+                        <h3 id="fancy-title" class="lyrics-name"></h3>
+                        <p class="author lead">Album by <span id="fancy-artist"></span></p>
+                    </div>
+                    <div class="col-md-3 text-md-right text-center">
+                        <button onclick="getLyrics()" class="btn btn-success">Get Lyrics</button>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <!-- Single Lyrics -->
+            <div id="display-lyrics" class="single-lyrics text-center">
+                <button class="btn go-back">&lsaquo;</button>
+                <h2 id="song-artist" class="text-success mb-4"></h2>
+                <pre id="song-lyrics" class="lyric text-white">
+                </pre>
+            </div>
+            
+
+
+        </main>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Custom Script Here -->
+
+    <script>
+        document.getElementById('display-lyrics').style.display = 'none';
+        document.getElementById('display-details').style.display = 'none';
+        document.getElementById('search-button').addEventListener('click', function() {
+            const titles = document.getElementById('song-field').value;
+            const artist = document.getElementById('artist-field').value;
+
+            fetch(`https://api.lyrics.ovh/v1/${artist}/${titles}`)
+            .then(res => res.json())
+            .then(data => {
+                const lyr = document.getElementById('song-lyrics');
+                lyr.innerHTML = `${data.lyrics}`;
+                const nam = document.getElementById('song-artist');
+                nam.innerHTML = `${titles} by ${artist}`;
+
+                document.getElementById('fancy-title').innerHTML = `${titles}`;
+                
+                document.getElementById('fancy-artist').innerHTML = `${artist}`;
+                
+                document.getElementById('display-details').style.display = 'block';
+            })
+        })
+
+        function getLyrics(){
+            document.getElementById('display-lyrics').style.display = 'block';
+        }
+
+    </script>
+
+</body>
+
+</html>
